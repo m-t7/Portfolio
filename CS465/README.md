@@ -126,7 +126,7 @@ Testing with authentication introduced complexity because:
 
 This reinforced the importance of securing backend routes and validating credentials before granting access to administrative functionality.
 
-# How has this course helped you in reaching your professional goals? What skills have you learned, developed, or mastered in this course to help you become a more marketable candidate in your career field?
+## How has this course helped you in reaching your professional goals? What skills have you learned, developed, or mastered in this course to help you become a more marketable candidate in your career field?
 
 This course strengthened my full stack engneering skills by working with frontend, backend, database, and security technologies in a single, end to end project. Throughout the course, I'ved developed abilities in REST API design, Angular SPAs, MongoDB with Mongoose, JWT authentication, debugging, and endpoint testing. This course has given me practical experience connecting all application layers, making me a more confident and marketable candidate for full stack development roles.
 
