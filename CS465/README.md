@@ -58,7 +58,7 @@ The backend was reorganized into:
 * `app_server` (customer-facing routes and views)
 * `app_api` (REST endpoints)
 
-**Benefit:** Clear separation of concerns and improved maintainability.
+**Benefit:** Clear separation of concerns and easy maintainability.
 
 ### 2. Implementing a JWT Interceptor
 
@@ -108,9 +108,6 @@ Endpoints such as:
 
 were tested using the browser’s Network tab and verified for correct response codes and returned JSON objects.
 
-
-## Security Testing with JWT Authentication
-
 After implementing authentication:
 
 * Protected endpoints required a valid JWT.
@@ -123,8 +120,6 @@ Testing with authentication introduced complexity because:
 * Requests must include valid headers.
 * Expired tokens must be handled properly.
 * Frontend behavior must adjust based on authentication state.
-
-This reinforced the importance of securing backend routes and validating credentials before granting access to administrative functionality.
 
 ## How has this course helped you in reaching your professional goals? What skills have you learned, developed, or mastered in this course to help you become a more marketable candidate in your career field?
 
