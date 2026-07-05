@@ -28,7 +28,7 @@ flowchart LR
 
         %% Deployments are independent per microfrontend (CDN/hosting omitted)
 
-    classDef microfront fill:#f9f,stroke:#333,stroke-width:1px;
+    classDef microfront fill:#ba3b3d,stroke:#333,stroke-width:1px;
     class P,A microfront;
 ```
 
