@@ -1,0 +1,14 @@
+CSCI100,Introduction to Computer Science,CSCI
+CSCI200,Data Structures,CSCI,CSCI100
+CSCI300,Algorithms,CSCI,CSCI200
+MATH101,College Algebra,MATH
+MATH201,Discrete Mathematics,MATH,MATH101
+MATH301,Linear Algebra,MATH,MATH201
+ENG101,English Composition,ENGL
+ENG201,Technical Writing,ENGL,ENG101
+BIO101,Introduction to Biology,BIO
+BIO201,Cell Biology,BIO,BIO101
+CHEM101,General Chemistry,CHEM
+CHEM201,Organic Chemistry,CHEM,CHEM101
+HIST101,World History,HIST
+HIST201,Modern History,HIST,HIST101
