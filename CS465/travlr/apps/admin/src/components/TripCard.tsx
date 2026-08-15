@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { stripHtml } from "../lib/text";
+import { stripHtml } from "../../../shared/text";
 import type { Trip } from "../lib/types";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
