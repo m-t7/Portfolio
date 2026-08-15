@@ -3,6 +3,10 @@
 #include <iostream>
 #include <algorithm>
 #include <sstream>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <limits>
 
 using namespace std;
 
@@ -69,82 +73,44 @@ vector<string> split(const string str, char delimiter) {
 }
 
 //============================================================================
-// Course/CourseTree methods and structs
+// Course/CourseCatalog methods and structs
 //============================================================================
 
 struct Course {
-    string courseId; // unique identifier
+    string courseId;
     string title;
+    string discipline;
     vector<string> prerequisites;
-    Course *left;
-    Course *right;
 
-    // Default Constructor 
-    Course() {
-      this->left = nullptr;
-      this->right = nullptr;
-    }
+    Course() = default;
 
-    // Constructor
-    Course(string courseId, string title, vector<string> prerequisites) {
-        this->courseId = courseId;
-        this->title = title;
-        this->prerequisites = prerequisites;
-        this->left = nullptr;
-        this->right = nullptr;
-    }
+    Course(const string& id,
+            const string& title,
+            const string& discipline,
+            const vector<string>& prereqs)
+        : courseId(id),
+          title(title),
+          discipline(discipline),
+          prerequisites(prereqs) {}
 };
 
-class CourseTree {
-    private:
-        Course* root;
-        void addCourse(Course* course, string courseId, string title, vector<string> prerequisites);
-        void printCompSciCoursesInOrder(Course* course);
-        void deleteTree(Course* course);
+class CourseCatalog {
+private:
+    unordered_map<string, Course> courses;
+    unordered_map<string, vector<string>> disciplineIndex;
 
-    public:
-        CourseTree();
-        virtual ~CourseTree();
-        void PrintCourse(Course course);
-        void PrintCompSciCoursesInOrder();
-        void LoadCoursesFromFile(string filename);
-        void Insert(string courseId, string title, vector<string> prerequisites);
-        Course Search(string courseId);
+public:
+    void LoadCoursesFromFile(const string& filename);
+    const Course* Search(const string& courseId);
+    vector<Course> ListCoursesInDiscipline(const string& discipline);
+    vector<string> GetPrerequisites(const string& courseId);
 };
-
-/**
- * Default constructor
- */
-CourseTree::CourseTree() : root(nullptr) {}
-
-/**
- * Destructor
- */
-CourseTree::~CourseTree() {
-    deleteTree(root);
-}
-
-/**
- * Recursively delete all nodes in the tree
- */
-void CourseTree::deleteTree(Course* course) {
-    if (course == nullptr) {
-        return;
-    }
-
-    // Recursively delete left and right subtrees
-    deleteTree(course->left);
-    deleteTree(course->right);
-
-    // Delete the current node
-    delete course;
-}
 
 /**
  * Loads courses from a file and inserts them into the course tree.
  * @param filename The name of the file containing course data.
  */
-void CourseTree::LoadCoursesFromFile(string filename) {
+void CourseCatalog::LoadCoursesFromFile(const string& filename) {
     ifstream file(filename);
 
     if (!file.is_open()) {
@@ -152,149 +118,125 @@ void CourseTree::LoadCoursesFromFile(string filename) {
         return;
     }
 
-    int courseCount = 0;
     string line;
     vector<string> course_data;
     
     while (getline(file, line)) {
-        stringstream ss(line);
-        string course_string;
-
-        // Read the entire line into course_string
-        getline(ss, course_string);
 
         // Split the course_string by commas
-        vector<string> course_data = split(course_string, ',');
+        vector<string> course_data = split(line, ',');
 
-        if (course_data.size() < 2 || course_data[0].empty() || course_data[1].empty()) {
-            cerr << "Error: Missing courseId or title in line #" << courseCount << ": " << line << endl;
+        if (course_data.size() < 3 || course_data[0].empty() || course_data[1].empty() || course_data[2].empty()) {
             continue;  // Skip this line
         }
 
         string courseId = course_data[0];
         string title = course_data[1];
+        string discipline = course_data[2]; 
 
         // Assign prerequisites from index 2 onward
         vector<string> prerequisites;
 
-        if (course_data.size() > 2) {
-            prerequisites.assign(course_data.begin() + 2, course_data.end());
-        }
+        prerequisites.assign(course_data.begin() + 2, course_data.end());
 
         // Insert the course into the tree
-        Insert(courseId, title, prerequisites);
-        courseCount++;
+        courses[courseId] = Course(courseId, title, discipline, prerequisites);
+        disciplineIndex[discipline].push_back(courseId);
     }
     
     file.close();
     
-    cout << endl << courseCount << " courses loaded." << endl; 
+    cout << endl << courses.size() << " courses loaded." << endl; 
 }
 
-/**
- * Traverse the tree in order
- */
-void CourseTree::PrintCompSciCoursesInOrder() {
-    printCompSciCoursesInOrder(root);
+const Course* CourseCatalog::Search(const string& courseId) {
+
+    string id = toUpper(trim(courseId));
+
+    auto it = courses.find(id);
+
+    if (it == courses.end())
+        return nullptr;
+
+    return &it->second;
 }
 
-/**
- * Insert a course
- */
-void CourseTree::Insert(string courseId, string title, vector<string> prerequisites) {
-    // Convert courseId to uppercase for consistency
-    string uppercaseCourseId = toUpper(courseId);
-  
-    if (root == nullptr) // Tree is empty
-    {
-        root = new Course(uppercaseCourseId, title, prerequisites);
-        return;
-    } 
+vector<Course> CourseCatalog::ListCoursesInDiscipline(const string& discipline) {
 
-    addCourse(root, uppercaseCourseId, title, prerequisites); 
-}
+    vector<Course> results;
 
-/**
- * Search for a course
- */
-Course CourseTree::Search(string courseId) {
-    Course* currentCourse = root;
-    string uppercaseCourseId = toUpper(courseId); // All courseIDs are stored in uppercase
+    auto it = disciplineIndex.find(trim(discipline));
 
-    while (currentCourse != nullptr) {
-      // if course is found return course
-      if (currentCourse->courseId == uppercaseCourseId) {
-          return *currentCourse;  // Dereference the pointer and return a copy of the course
-      }  
+    if (it == disciplineIndex.end())
+        return results;
 
-      // if courseId is less than current course then traverse left
-      if (currentCourse->courseId > uppercaseCourseId) currentCourse = currentCourse->left;
-      else currentCourse = currentCourse->right;
-    }
-    
-    Course course;
-    return course;
-}
+    for (const auto& id : it->second) {
 
-/**
- * Add a course to the tree (recursive)
- * @param course Current course in tree
- * @param courseId course id to be added
- * @param title course title to be added
- * @param prerequisites course prerequisites to be added
- */
-void CourseTree::addCourse(Course* course, string courseId, string title, vector<string> prerequisites) {
-    // if course is smaller than current node 
-    if (course->courseId > courseId) {
-      if (course->left == nullptr) course->left = new Course(courseId, title, prerequisites); // add course to left
+        auto courseIt = courses.find(id);
 
-      else addCourse(course->left, courseId, title, prerequisites); // recurse left subtree
-
-      return;
+        if (courseIt != courses.end()) {
+            results.push_back(courseIt->second);
+        }
     }
 
-    // else course is considered larger than current node
-    if (course->right == nullptr) course->right = new Course(courseId, title, prerequisites); // add node to right
-
-    else addCourse(course->right, courseId, title, prerequisites); // recurse right subtree
+    return results;
 }
 
-/** 
- * Performs an in-order traversal, printing the course ID and title
- * for each course with an ID containing "CSCI" or "MATH".
- * @param course The root node of the subtree to print.
- */
-void CourseTree::printCompSciCoursesInOrder(Course* course) {
-    if (course == nullptr) return; // stop traversing if node is empty
+vector<string> CourseCatalog::GetPrerequisites(const string& courseId) {
 
-    printCompSciCoursesInOrder(course->left); // traverse left subtree 
+    string start = toUpper(trim(courseId));
 
-    if (course->courseId.find("CSCI") != string::npos || course->courseId.find("MATH") != string::npos) {
-        cout << course->courseId << ", " << course->title << endl;
+    unordered_set<string> visited;
+    queue<string> q;
+
+    q.push(start);
+
+    while (!q.empty()) {
+
+        string current = q.front();
+        q.pop();
+
+        auto it = courses.find(current);
+
+        if (it == courses.end())
+            continue;
+
+        for (const auto& prereq : it->second.prerequisites) {
+
+            if (visited.insert(prereq).second) {
+
+                if (courses.find(prereq) != courses.end()) {
+                    q.push(prereq);
+                }
+            }
+        }
     }
 
-    printCompSciCoursesInOrder(course->right); // traverse right subtree after left subtree and current node
+    return vector<string>(visited.begin(), visited.end());
 }
 
 /**
  * Outputs the course ID, title, and prerequisites.
  * @param course The course to print.
  */
-void printCourseDetails(const Course course) {
+void printCourseDetails(const Course& course) {
     cout << course.courseId << ", " << course.title << endl;
     cout << "Prerequisites: ";
 
-    if (course.prerequisites.size() == 0) {
+    if (course.prerequisites.empty()) {
         cout << "None" << endl;
         return;
-    } 
-    for (const string prerequisite : course.prerequisites) {
-        cout << prerequisite;
-        if (prerequisite != course.prerequisites.back()) {
+    }
+
+    for (size_t i = 0; i < course.prerequisites.size(); i++) {
+        cout << course.prerequisites[i];
+
+        if (i < course.prerequisites.size() - 1) {
             cout << ", ";
         }
     }
-    cout << endl; // Ensure the output ends with a newline
+
+    cout << endl;
 }
 
 /**
@@ -304,21 +246,19 @@ int main(int argc, char* argv[]) {
     string filename;
 
     if (argc < 2) {
-      cout << "Enter the filename containing course data: ";
-      getline(cin, filename);
+        cout << "Enter the filename containing course data: ";
+        getline(cin, filename);
     }
     else {
-      filename = argv[1];
+        filename = argv[1];
     }
 
-    // Define a binary search tree to hold all courses
-    CourseTree* courseTree = new CourseTree();
-    Course course;
+    CourseCatalog catalog;
     string courseId;
     int choice = 0;
 
     cout << endl << "Welcome to the course planner." << endl;
-    
+
     while (choice != 9) {
         cout << endl << "  1. Load Data Structure." << endl;
         cout << "  2. Print Computer Science Courses." << endl;
@@ -326,7 +266,6 @@ int main(int argc, char* argv[]) {
         cout << "  9. Exit" << endl;
         cout << endl << "What would you like to do? ";
 
-        // If input is not an integer, clear the error state and ignore the invalid input
         if (!(cin >> choice)) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -334,30 +273,40 @@ int main(int argc, char* argv[]) {
             continue;
         }
 
-        cin.ignore(); // To ignore the newline character after input
+        cin.ignore();
 
         switch (choice) {
             case 1:
-                courseTree->LoadCoursesFromFile(filename);
+                catalog.LoadCoursesFromFile(filename);
                 break;
 
-            case 2:
-                cout << "Here is a sample schedule:" << endl << endl;
-                courseTree->PrintCompSciCoursesInOrder();
-                break;
+            case 2: {
+                cout << "Here are the Computer Science courses:" << endl << endl;
 
-            case 3:
+                vector<Course> csCourses = catalog.ListCoursesInDiscipline("CSCI");
+
+                for (const Course& course : csCourses) {
+                    cout << course.courseId << ", " << course.title << endl;
+                }
+
+                break;
+            }
+
+            case 3: {
                 cout << endl << "What course do you want to know about? ";
                 getline(cin, courseId);
-                
-                course = courseTree->Search(courseId);
 
-                if (!course.courseId.empty()) {
-                    printCourseDetails(course);
-                } else {
+                const Course* course = catalog.Search(courseId);
+
+                if (course != nullptr) {
+                    printCourseDetails(*course);
+                }
+                else {
                     cout << "Course Id " << courseId << " not found." << endl;
                 }
+
                 break;
+            }
 
             case 9:
                 break;
@@ -366,9 +315,8 @@ int main(int argc, char* argv[]) {
                 cout << choice << " is not a valid option." << endl;
                 break;
         }
-      }
+    }
 
     cout << "Thank you for using the course planner!" << endl;
-
-	  return 0;
+    return 0;
 }
