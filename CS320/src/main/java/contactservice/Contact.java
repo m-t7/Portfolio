@@ -9,16 +9,18 @@ public class Contact {
 	
 	// Constructor
 	public Contact(String contactId, String firstName, String lastName, String phone, String address) {
-		this.validateStringField(contactId, "Contact ID", 10);
-		this.validateStringField(firstName, "First Name", 10);
-		this.validateStringField(lastName, "Last Name", 10);
+		if (contactId != null && !contactId.isEmpty()) {
+			this.validateStringField(contactId, "Contact ID", 10);
+		}
+		this.validateStringField(firstName, "First Name", 50);
+		this.validateStringField(lastName, "Last Name", 50);
 		this.validatePhone(phone);
-		this.validateStringField(address, "Address", 30);
+		this.validateStringField(address, "Address", 150);
 
 		this.contactId = contactId;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.phone = phone;
+		this.phone = (phone == null || phone.isEmpty()) ? null : phone;
 		this.address = address;
 	}
 
@@ -61,12 +63,15 @@ public class Contact {
 
 	public void setPhone(String phone) {
 		this.validatePhone(phone);
-		this.phone = phone;
+		this.phone = (phone == null || phone.isEmpty()) ? null : phone;
 	}
 
 	private void validatePhone(String phone) {
-		if (phone == null || phone.length() != 10 || !phone.matches("\\d{10}")) {
-			throw new IllegalArgumentException("Phone must be exactly 10 digits.");
+		if (phone == null || phone.isEmpty()) {
+			return;
+		}
+		if (phone.length() != 10 || !phone.matches("\\d{10}")) {
+			throw new IllegalArgumentException("Phone must be exactly 10 digits when provided.");
 		}
 	}
 
