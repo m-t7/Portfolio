@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { type Trip, fetchTrips } from "../lib/api";
-import { stripHtml } from "../lib/text";
+import { stripHtml } from "../../../shared/text";
 
 export function Travel() {
   const [trips, setTrips] = useState<Trip[]>([]);
