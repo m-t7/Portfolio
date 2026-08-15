@@ -1,12 +1,40 @@
-**How can I ensure that my code, program, or software is functional and secure?**
+**Contact service — Run with Maven**
 
-To ensure that my code, program, or software is functional and secure, I test frequently using both manual and automated methods. I also validate inputs, handle expected errors, and validate edge cases through automated testing.
+Prerequisites:
+- Java JDK 17+ (JDK 21 recommended)
+- Apache Maven (on PATH)
 
-**How do I interpret user needs and incorporate them into a program?**
+From the project root (`CS320`) run these Maven commands:
 
-I listenin to feedback and consider the client's needs and ultimate goals to turn that into functional software features. 
+- Compile sources:
 
-**How do I approach designing software?**
+```bash
+mvn clean compile
+```
 
-I plan ahead by breaking the project into small tasks and sketching out the structure. Ironing out the key points of functionality and focusing on maintainability helps me design clean, fucntioning software.
+- Run the GUI application (exec plugin):
+
+```bash
+mvn exec:java -Dexec.mainClass=contactservice.ContactFormApp
+```
+
+- Run unit tests:
+
+```bash
+mvn test
+```
+
+- Package (produce `target/cs320-1.0-SNAPSHOT.jar`):
+
+```bash
+mvn package
+```
+
+Run the compiled classes directly (example, adjust paths for your OS):
+
+```bash
+java -cp "target/classes:sqlite-jdbc-3.45.3.0.jar:slf4j-api-2.0.13.jar" contactservice.ContactFormApp
+```
+
+The `pom.xml` declares the SQLite JDBC and SLF4J dependencies; `mvn exec:java` and `mvn test` will download and use them automatically.
 
