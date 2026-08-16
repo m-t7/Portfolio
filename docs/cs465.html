@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS 465 · Travlr Getaways · Mark Turner ePortfolio</title>
+  <meta name="description" content="Full-stack Node/Express/MongoDB application modernized to React, with a stored-XSS fix.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="layout">
+<aside class="sidebar">
+  <span class="brand"><span class="name">Mark Turner</span><small>Computer Science ePortfolio</small></span>
+  <nav>
+    <a class="navlink" href="index.html">Self-Assessment</a>
+    <a class="navlink active" href="cs465.html">CS 465 · Full-Stack</a>
+    <a class="navlink" href="cs320.html">CS 320 · Databases</a>
+    <a class="navlink" href="cs300.html">CS 300 · Algorithms</a>
+  </nav>
+</aside>
+<div class="content">
+
+<main>
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="eyebrow">CS 465 · Full-Stack Development</span>
+    </div>
+    <h1>Travlr Getaways</h1>
+    <p class="subtitle">From a Handlebars &amp; Angular implementation to a React + Vite stack</p>
+    <div>
+      <span class="tag">Software Engineering &amp; Databases</span>
+      <span class="tag">Security</span>
+      <span class="tag">Team Collaboration</span>
+    </div>
+  </div>
+
+  <div class="links-row">
+    <a class="btn" href="https://github.com/m-t7/Portfolio/tree/main/CS465">View enhanced source</a>
+    <a class="btn secondary" href="https://github.com/m-t7/Portfolio/tree/pre-enhancement/CS465">View original (pre-enhancement)</a>
+  </div>
+
+  <h2>Why I Selected This Artifact</h2>
+  <p>
+    Travlr Getaways is a full-stack travel booking web application originally built in CS 465,
+    Full Stack Application Development, using the MEAN stack to manage and display vacation
+    packages through a public website and an administrative dashboard. I selected it for my
+    ePortfolio because it demonstrates full-stack software engineering skills, and the enhancement
+    shows my ability to modernize an application by migrating the public-facing Handlebars.js
+    frontend and the internal admin Angular frontend into a unified React micro-frontend
+    architecture that improves maintainability and reusability. I originally intended to use
+    Next.js for both front ends, but it felt like overkill given the application's current scope
+    and size, so I built them with Vite instead, which gave the same standardized React tooling
+    with a much lighter footprint.
+  </p>
+  <p>
+    This work met the course outcomes I identified in Module One by applying collaborative software
+    design principles, evaluating architectural trade-offs, implementing modern development
+    practices, and improving the application's maintainability and security, all without changing
+    my original outcome plan.
+  </p>
+
+  <h2>What It Is</h2>
+  <p>
+    Travlr Getaways is a full-stack trip-booking application: a public site where visitors browse
+    trips, and an admin dashboard where staff manage listings. The backend is a Node and Express
+    REST API backed by MongoDB, exposing endpoints such as <code>/api/trips</code>,
+    <code>/api/login</code>, and <code>/api/register</code>.
+  </p>
+
+  <h2>Original Artifact</h2>
+  <p>
+    The original version served the customer-facing site with Express
+    and Handlebars templates (full server-side rendering) and the admin dashboard as a separate
+    Angular single-page application. Both front ends talked to the same Express/MongoDB API.
+  </p>
+  <table>
+    <tr><th>Layer</th><th>Original</th></tr>
+    <tr><td>Public site</td><td>Express + Handlebars (server-rendered)</td></tr>
+    <tr><td>Admin dashboard</td><td>Angular SPA, Bootstrap via CDN</td></tr>
+    <tr><td>API / Data</td><td>Express + Mongoose + MongoDB</td></tr>
+  </table>
+
+  <h2>Enhancement</h2>
+  <ul>
+    <li><strong>Frontend rewrite:</strong> replaced Handlebars (public site) and Angular (admin dashboard) with React microfrontends (Vite + Tailwind CSS); the legacy <code>app_server</code> and <code>app_admin</code> folders were removed once their replacements were feature-complete.</li>
+    <li><strong>Standard tooling:</strong> Vite, Biome, and Tailwind CSS replace three separate toolchains with one.</li>
+    <li><strong>Reusable UI components:</strong> <code>TripCard</code>, a trip listing view, and a shared <code>Navbar</code> replace duplicated markup across pages.</li>
+    <li><strong>Security:</strong> the original Handlebars template rendered trip descriptions with an unescaped triple-stash (<code>{{{this.description}}}</code>), and the original Angular admin bound them with <code>[innerHTML]</code>. Both render raw HTML from the API. The React rewrite renders descriptions as plain text everywhere, closing that stored-XSS surface.</li>
+    <li><strong>Authentication:</strong> the original app already enforced JWT auth on protected trip routes (a backend <code>authenticateJWT</code> middleware returning 401, paired with an Angular <code>HttpInterceptor</code> that attached the token). I carried that same behavior into the React admin app as a shared <code>fetch</code> wrapper that attaches the Authorization header, so the access control isn't new, but the implementation is.</li>
+  </ul>
+
+  <h2>Course Outcomes</h2>
+  <table>
+    <tr><th>Outcome</th><th>Evidence in this artifact</th></tr>
+    <tr>
+      <td>Software engineering &amp; databases</td>
+      <td>Refactored a three-tier app (React front ends, Express API, MongoDB) while preserving the API contract, and introduced reusable components with a cleaner client-server separation.</td>
+    </tr>
+    <tr>
+      <td>Security</td>
+      <td>Identified and remediated a stored XSS vector present in both the original Handlebars and Angular templates; carried forward the existing JWT/401 access control into a React-native equivalent.</td>
+    </tr>
+    <tr>
+      <td>Team collaboration</td>
+      <td>Worked within an existing codebase's route and model structure, the same discipline required when joining an established team project.</td>
+    </tr>
+  </table>
+
+  <h2>Reflection</h2>
+  <p>
+    Working on this enhancement taught me a lot about building applications with React and Vite.
+    Getting the project set up was one of the hardest parts, but breaking it into smaller pieces
+    and following the documentation made it much easier. I also learned how to plan before making
+    big changes to an application, especially when moving to a new framework. The biggest challenge
+    was rebuilding the frontend, but seeing everything come together made the effort worthwhile.
+  </p>
+  <p>
+    The plan I walked through in my code review held up well: I didn't need to change my overall
+    approach once I started implementing it, though I made a few smaller structural adjustments as
+    I got deeper into the code than the review alone surfaced, for example, moving the admin app's
+    selected trip code from <code>localStorage</code> to a <code>/edit-trip/:code</code> route
+    param once I saw how fragile that coupling actually was.
+  </p>
+  <p>
+    There are still a few enhancements I'd like to make, such as improving the site's
+    responsiveness and replacing some of the outdated images with SVGs or simple CSS styling for a
+    more modern look and feel. I intentionally kept the scope of this enhancement manageable given
+    time constraints, so I'd call the production-polish part of my plan partially rather than
+    fully met: the architecture and security work are done, but the visual and responsive polish
+    is real, remaining work rather than a finished stretch goal.
+  </p>
+</main>
+
+<footer>
+  <a href="https://github.com/m-t7/Portfolio">View source on GitHub</a>
+</footer>
+
+</div>
+</div>
+
+</body>
+</html>

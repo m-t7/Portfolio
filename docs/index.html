@@ -1,14 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Title</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computer Science ePortfolio</title>
+  <meta name="description" content="Professional self-assessment and capstone ePortfolio for Mark Turner, focused on full-stack software engineering.">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Hello, World!</h1>
-    <p>This is a standard HTML document.</p>
+<div class="layout">
+<aside class="sidebar">
+  <span class="brand"><span class="name">Mark Turner</span><small>Computer Science ePortfolio</small></span>
+  <nav>
+    <a class="navlink active" href="index.html">Self-Assessment</a>
+    <a class="navlink" href="cs465.html">CS 465 · Full-Stack</a>
+    <a class="navlink" href="cs320.html">CS 320 · Databases</a>
+    <a class="navlink" href="cs300.html">CS 300 · Algorithms</a>
+  </nav>
+</aside>
+<div class="content">
+
+<main>
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="eyebrow">Computer Science ePortfolio</span>
+    </div>
+    <h1>Professional Self-Assessment</h1>
+    <p class="subtitle">Full-Stack Software Engineering</p>
+
+    <nav class="section-nav" aria-label="Jump to section">
+      <a href="#collaboration">Collaboration</a>
+      <a href="#communication">Communication</a>
+      <a href="#dsa">Data Structures &amp; Algorithms</a>
+      <a href="#engineering">Engineering &amp; Databases</a>
+      <a href="#security">Security</a>
+      <a href="#ai-usage">AI Usage</a>
+      <a href="#artifacts">Artifacts</a>
+    </nav>
+  </div>
+
+  <div class="card">
+    <p style="margin: 0 0 1rem;">
+      Before making enhancements, I recorded an informal code review covering the existing
+      functionality of each artifact and my plan for the enhancements that follow on this
+      site.
+    </p>
+    <a class="btn" href="https://drive.google.com/file/d/1WFh8-Oye5ov4zhQ3TE6SaeGUiVvE-TXL/view?usp=sharing" target="_blank" rel="noopener">🎥 Watch the code review</a>
+  </div>
+
+  <p>
+    I'm a computer science graduate specializing in full-stack software engineering: building
+    applications end to end, from data structures and database design through APIs, front-end
+    interfaces, and security. This ePortfolio collects three artifacts that show that range: a
+    tested Java data layer, a C++ program built around choosing the right data structure, and a
+    full-stack web app I modernized from a legacy stack into a secured React front end.
+  </p>
+
+  <h2 id="collaboration">Collaboration</h2>
+  <p>
+    In CS 230, I worked through Agile team practices directly: writing user
+    stories from stakeholder interviews, prioritizing them the way a Scrum team would, and thinking
+    about what makes someone a good teammate in software development, clear and frequent
+    communication, taking accountability for tasks, and staying adaptable as requirements shift.
+    That habit carried into this portfolio's artifacts: enhancing the Travlr Getaways application
+    for CS 465 meant reading an existing codebase's route handlers, models, and components
+    carefully before changing anything, the same discipline required when joining a team
+    mid-project rather than building alone from scratch.
+  </p>
+
+  <h2 id="communication">Communication</h2>
+  <p>
+    In CS 305, I worked with a simulated client, Artemis Financial, assessing the security of
+    their RESTful API and reporting what I found. Turning a static analysis report full of
+    vulnerability details into a set of prioritized, actionable recommendations taught me how to
+    communicate technical findings in terms a client can act on, not just a list of flaws. Each
+    artifact in this portfolio carries that same habit forward: a plain-language README written for
+    a reader who won't open the source file, aimed at the same audience a stakeholder update is
+    written for.
+  </p>
+
+  <h2 id="dsa">Data Structures and Algorithms</h2>
+  <p>
+    The CS 300 course planner is the clearest evidence here. The original version stored courses in
+    a binary search tree; I replaced it with an <code>unordered_map</code> for constant-time course
+    lookup, added a discipline index for faster searching, and implemented a breadth-first search
+    to traverse prerequisite chains. That same habit, matching the structure and algorithm to the
+    operation a program actually performs, shaped the query patterns behind the CS 320 contact
+    database and the Travlr trip lookups too.
+  </p>
+
+  <h2 id="engineering">Software Engineering and Databases</h2>
+  <p>
+    CS 320 and CS 465 show the same discipline at different scales. CS 320 pairs a validated
+    <code>Contact</code> model with a SQLite-backed service layer and a JUnit suite covering every
+    CRUD path. CS 465 scales that up to a full architecture: an Express/Node API backed by MongoDB,
+    consumed by two React front ends. Modernizing it, replacing legacy Handlebars and Angular with
+    a shared React/Vite/Tailwind stack, taught me to refactor a working system without breaking its
+    contract with its consumers.
+  </p>
+
+  <h2 id="security">Security</h2>
+  <p>
+    Security shows up as a design constraint, not an afterthought. The CS 320 database layer builds
+    every query with parameterized statements, closing off SQL injection at the source. In CS 465 I
+    found and removed a stored XSS surface that existed in both the original Handlebars template
+    and the original Angular admin app, each rendering trip descriptions as raw HTML, and carried
+    the app's existing JWT authentication forward into the new React admin app so protected
+    endpoints still reject unauthenticated requests instead of trusting the client.
+  </p>
+
+  <h2 id="ai-usage">AI Usage Disclosure</h2>
+  <p>
+    I used Claude (Anthropic), a generative AI assistant, to help build this GitHub Pages site,
+    including its HTML/CSS structure, navigation, and styling, and to help organize and word the
+    artifact narratives and this self-assessment. The course names, artifact selections,
+    enhancement decisions, and reflections are mine; I reviewed every AI-drafted technical claim
+    against the actual source code in this repository before publishing it, and corrected several
+    inaccuracies the drafting process introduced along the way.
+  </p>
+  <p style="color: var(--text-faint); font-size: 0.85rem;">
+    Anthropic. (2026). <em>Claude</em> (Sonnet 5) [Large language model]. https://claude.ai
+  </p>
+
+  <h2 id="artifacts">Explore the Artifacts</h2>
+  <div class="artifact-grid">
+    <a class="artifact-card" href="cs465.html">
+      <h3>CS 465 · Travlr Getaways</h3>
+      <p>Full-stack Node/Express/MongoDB app modernized to React + Vite, with a stored-XSS fix.</p>
+    </a>
+    <a class="artifact-card" href="cs320.html">
+      <h3>CS 320 · Contact Service</h3>
+      <p>Java + SQLite CRUD service with a full JUnit test suite and a Swing UI.</p>
+    </a>
+    <a class="artifact-card" href="cs300.html">
+      <h3>CS 300 · Course Planner</h3>
+      <p>C++ course catalog enhanced from a binary search tree to a hash-indexed structure with BFS prerequisite traversal.</p>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <a href="https://github.com/m-t7/Portfolio">View source on GitHub</a>
+</footer>
+
+</div>
+</div>
 
 </body>
 </html>

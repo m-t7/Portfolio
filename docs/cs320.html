@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS 320 · Contact Service · Mark Turner ePortfolio</title>
+  <meta name="description" content="Java + SQLite contact management service with a full JUnit test suite and a Swing UI.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="layout">
+<aside class="sidebar">
+  <span class="brand"><span class="name">Mark Turner</span><small>Computer Science ePortfolio</small></span>
+  <nav>
+    <a class="navlink" href="index.html">Self-Assessment</a>
+    <a class="navlink" href="cs465.html">CS 465 · Full-Stack</a>
+    <a class="navlink active" href="cs320.html">CS 320 · Databases</a>
+    <a class="navlink" href="cs300.html">CS 300 · Algorithms</a>
+  </nav>
+</aside>
+<div class="content">
+
+<main>
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="eyebrow">CS 320 · Software Testing, Automation &amp; Databases</span>
+    </div>
+    <h1>Contact Service</h1>
+    <p class="subtitle">Java + SQLite CRUD service with a full JUnit test suite</p>
+    <div>
+      <span class="tag">Software Engineering &amp; Databases</span>
+      <span class="tag">Security</span>
+    </div>
+  </div>
+
+  <div class="links-row">
+    <a class="btn" href="https://github.com/m-t7/Portfolio/tree/main/CS320">View enhanced source</a>
+    <a class="btn secondary" href="https://github.com/m-t7/Portfolio/tree/pre-enhancement/CS320">View original (pre-enhancement)</a>
+  </div>
+
+  <h2>Why I Selected This Artifact</h2>
+  <p>
+    ContactService is a Java application created in CS 320, Software Test, Automation, and
+    Quality Assurance. It was originally designed as an in-memory contact management service that
+    provides CRUD operations for contact records containing a unique ID, first name, last name,
+    phone number, and address. I selected this artifact because it demonstrates my ability to
+    design maintainable software while applying object-oriented principles, input validation, and
+    software testing to build a reliable application.
+  </p>
+  <p>
+    This artifact demonstrates my ability to improve software design by extending a console-based
+    service into a complete desktop application. The enhancement replaced the in-memory HashMap
+    with a relational SQLite database using parameterized SQL queries, preserving the existing
+    CRUD interface while adding persistent data storage. These enhancements strengthened the
+    application's usability and scalability, aligning with Course Outcomes 3, 4, and 5 by applying
+    sound software design principles, integrating database technologies, and implementing secure
+    programming practices.
+  </p>
+
+  <h2>What It Is</h2>
+  <p>
+    A Java contact management service: a Swing form lets a user add, look up, update, and delete
+    contacts, while a <code>ContactService</code> layer validates input and persists records to a
+    SQLite database. A JUnit test suite exercises every CRUD path independently of the UI.
+  </p>
+
+  <h2>Original Artifact</h2>
+  <p>
+    The original version had no user interface at all: <code>ContactService</code> stored
+    contacts in an in-memory <code>HashMap&lt;String, Contact&gt;</code> and was exercised entirely
+    through <code>ContactServiceTest</code> and <code>ContactTest</code>. There was no persistence
+    layer, so every contact disappeared as soon as the program stopped running.
+  </p>
+  <table>
+    <tr><th>Layer</th><th>Original</th></tr>
+    <tr><td>Storage</td><td>In-memory <code>HashMap&lt;String, Contact&gt;</code></td></tr>
+    <tr><td>Interface</td><td>None; a plain service class exercised only through JUnit tests</td></tr>
+    <tr><td>Persistence</td><td>None; all data lost when the program stopped</td></tr>
+  </table>
+
+  <h2>Enhancement</h2>
+  <ul>
+    <li><strong>Persistent storage:</strong> replaced the in-memory <code>HashMap</code> with a SQLite database, so contacts survive after the program stops.</li>
+    <li><strong>Parameterized queries:</strong> every insert, update, and delete goes through a <code>PreparedStatement</code> instead of string concatenation, keeping the data layer safe from SQL injection.</li>
+    <li><strong>Validation at the domain object:</strong> <code>Contact</code> enforces its own length limits and null checks, so invalid data can't reach the database regardless of which caller constructs it.</li>
+    <li><strong>Preserved interface:</strong> the CRUD method signatures on <code>ContactService</code> stayed the same, so this was a swap of the storage layer, not a rewrite of the service's contract.</li>
+  </ul>
+  <pre>UI (Swing Form) → ContactService → parameterized SQL → SQLite
+                          ↑
+                    JUnit tests exercise this layer directly,
+                    independent of the UI</pre>
+
+  <h2>Testing</h2>
+  <p>
+    <code>ContactTest</code> and <code>ContactServiceTest</code> cover the validation rules on the
+    domain object and the full CRUD lifecycle on the service, including expected failures such as
+    an over-length field or a duplicate ID, not just the success paths.
+  </p>
+
+  <h2>Course Outcomes</h2>
+  <table>
+    <tr><th>Outcome</th><th>Evidence in this artifact</th></tr>
+    <tr>
+      <td>Software engineering &amp; databases</td>
+      <td>Layered design (UI to service to parameterized SQL to SQLite) with validation pushed to the domain object, and a JUnit suite that tests the data layer independent of the UI.</td>
+    </tr>
+    <tr>
+      <td>Security</td>
+      <td>Every database write uses parameterized statements, eliminating SQL injection risk from user-entered contact fields.</td>
+    </tr>
+  </table>
+
+  <h2>Reflection</h2>
+  <p>
+    During the enhancement process, I gained a better understanding of integrating a relational
+    SQLite database into an existing application while preserving its original functionality. One
+    of the biggest challenges was refactoring the service layer to replace the in-memory data store
+    with a persistent database without changing the existing CRUD behavior. I also learned how to
+    write unit tests that exercise the <code>ContactService</code> and its validation rules
+    directly against the SQLite layer, verifying behavior end to end rather than mocking it out.
+    Building a Swing user interface on top of that layer made the application interactive and its
+    functionality more tangible. The plan from my code review held up well, and the feedback on
+    that plan confirmed the SQLite migration was the right scope for this enhancement rather than
+    something to expand further, so I met the planned course outcomes without significant changes
+    to my original approach. The one thing I'd call partially rather than fully met is test
+    coverage: <code>ContactServiceTest</code> and <code>ContactTest</code> cover the domain and
+    service layer thoroughly, but the Swing UI itself has no automated tests, so that part of the
+    application is still only verified by hand.
+  </p>
+</main>
+
+<footer>
+  <a href="https://github.com/m-t7/Portfolio">View source on GitHub</a>
+</footer>
+
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS 300 · Course Planner · Mark Turner ePortfolio</title>
+  <meta name="description" content="C++ course catalog enhanced from a binary search tree to a hash-indexed structure with BFS prerequisite traversal.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="layout">
+<aside class="sidebar">
+  <span class="brand"><span class="name">Mark Turner</span><small>Computer Science ePortfolio</small></span>
+  <nav>
+    <a class="navlink" href="index.html">Self-Assessment</a>
+    <a class="navlink" href="cs465.html">CS 465 · Full-Stack</a>
+    <a class="navlink" href="cs320.html">CS 320 · Databases</a>
+    <a class="navlink active" href="cs300.html">CS 300 · Algorithms</a>
+  </nav>
+</aside>
+<div class="content">
+
+<main>
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="eyebrow">CS 300 · Data Structures &amp; Algorithms</span>
+    </div>
+    <h1>Course Planner</h1>
+    <p class="subtitle">Replacing a binary search tree with a hash-indexed catalog and BFS traversal</p>
+    <div>
+      <span class="tag">Data Structures &amp; Algorithms</span>
+    </div>
+  </div>
+
+  <div class="links-row">
+    <a class="btn" href="https://github.com/m-t7/Portfolio/tree/main/CS%20300">View enhanced source</a>
+    <a class="btn secondary" href="https://github.com/m-t7/Portfolio/tree/pre-enhancement/CS%20300">View original (pre-enhancement)</a>
+  </div>
+
+  <h2>Why I Selected This Artifact</h2>
+  <p>
+    Course Planner is a C++ program built for CS 300, Data Structures and Algorithms. It was
+    designed for ABCU University to load course information from a file, store course records,
+    search for courses, display course information, and manage prerequisites. I selected this
+    artifact because it demonstrates my ability to apply algorithms and data structures to solve a
+    practical problem.
+  </p>
+  <p>
+    This artifact demonstrates my ability to choose appropriate data structures and algorithms to
+    improve the performance of a software solution. The original Course Planner used a binary
+    search tree to store course information. I replaced the tree with an <code>unordered_map</code>
+    for faster course lookups, added a new discipline index to make searching more efficient, and
+    implemented a breadth-first search algorithm to traverse course prerequisites efficiently. This
+    approach created a better software solution while aligning with Course Outcomes 2, 3, and 4 by
+    strengthening my technical communication, algorithmic thinking, and ability to use computing
+    tools effectively.
+  </p>
+
+  <h2>What It Is</h2>
+  <p>
+    A C++ command-line program that reads a CSV file of course data (number, title, discipline,
+    prerequisites), loads it into a course catalog, and lets a user search for a course, list every
+    course in a discipline, and look up the full prerequisite chain for a course through a simple
+    menu.
+  </p>
+
+  <h2>Original Artifact</h2>
+  <p>
+    The original version stored every course in a binary search tree keyed on course number, using
+    recursive insert and in-order traversal to print courses in sorted order. Looking up a course
+    or walking its prerequisite chain meant traversing the tree node by node.
+  </p>
+  <table>
+    <tr><th>Operation</th><th>Original</th></tr>
+    <tr><td>Storage</td><td>Binary search tree (<code>Course*</code> nodes with <code>left</code>/<code>right</code> pointers)</td></tr>
+    <tr><td>Course lookup</td><td>Tree traversal, O(log n) average</td></tr>
+    <tr><td>Prerequisite lookup</td><td>No dedicated traversal; handled ad hoc through the tree</td></tr>
+  </table>
+
+  <h2>Enhancement</h2>
+  <ul>
+    <li><strong>Course lookup:</strong> replaced the binary search tree with <code>unordered_map&lt;string, Course&gt;</code> keyed on course ID, so a single lookup is O(1) average instead of a tree walk.</li>
+    <li><strong>Discipline index:</strong> added a second <code>unordered_map&lt;string, vector&lt;string&gt;&gt;</code>, so listing every course in a discipline no longer means scanning the whole catalog.</li>
+    <li><strong>Prerequisite traversal:</strong> implemented a breadth-first search that starts from a course, walks its prerequisite edges level by level with a queue, and tracks visited courses so it terminates cleanly even if prerequisite chains overlap.</li>
+  </ul>
+  <pre>Course lookup:        unordered_map&lt;courseId, Course&gt;        O(1) average
+Discipline lookup:    unordered_map&lt;discipline, courseId[]&gt;  O(1) average
+Prerequisite lookup:  BFS over the prerequisite graph          O(V + E)</pre>
+
+  <h2>Course Outcomes</h2>
+  <table>
+    <tr><th>Outcome</th><th>Evidence in this artifact</th></tr>
+    <tr>
+      <td>Algorithmic thinking (Outcome 2)</td>
+      <td>Replaced a tree traversal with a breadth-first search over the prerequisite graph, reasoning explicitly about traversal order and termination.</td>
+    </tr>
+    <tr>
+      <td>Software design (Outcome 3)</td>
+      <td>Chose a data structure by the operation it needed to support: constant-time lookup for courses and disciplines, graph traversal for prerequisites.</td>
+    </tr>
+    <tr>
+      <td>Computing tools (Outcome 4)</td>
+      <td>Used the C++ standard library's <code>unordered_map</code>, <code>unordered_set</code>, and <code>queue</code> to implement the enhancement rather than hand-rolling equivalent structures.</td>
+    </tr>
+  </table>
+
+  <h2>Reflection</h2>
+  <p>
+    During the enhancement process, I gained a better understanding of how data structure choices
+    affect the scalability and maintainability of an application. One of the biggest
+    challenges was refactoring the original code while making sure the program continued to work
+    correctly after replacing the binary search tree. I also learned that every design decision
+    involves trade-offs, such as improving lookup speed with a hash table while giving up the
+    automatic sorting a binary search tree provides for free. The plan I presented in my code
+    review held up well against feedback on it, so I was able to achieve my desired outcomes
+    without any major changes to my implementation plan. The one outcome I'd call partially met
+    rather than fully met is testing: unlike the CS 320 contact service, this artifact has no
+    automated test suite, so the lookup, discipline-search, and BFS prerequisite logic are verified
+    by manual runs against the sample data rather than by repeatable unit tests.
+  </p>
+</main>
+
+<footer>
+  <a href="https://github.com/m-t7/Portfolio">View source on GitHub</a>
+</footer>
+
+</div>
+</div>
+
+</body>
+</html>
