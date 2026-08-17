@@ -56,11 +56,11 @@
   <h2 id="collaboration">Collaboration</h2>
   <p>
     Enhancing the Travlr Getaways application for CS 465 meant reading an existing codebase's
-    route handlers, models, and components carefully before changing anything, the same discipline
-    required when joining a team mid-project rather than building alone from scratch. Consolidating
+    route handlers, models, and components before changing anything, the same discipline
+    required when joining a team rather than building alone from scratch. Consolidating
     the public-facing site and the admin dashboard onto one shared framework, React with Vite and
-    Tailwind CSS, instead of the original Handlebars and Angular split, was itself a collaboration
-    decision: developers working on either app now share the same tooling, component patterns, and
+    Tailwind CSS, instead of the original Handlebars and Angular split, was a decision rooted in collaboration: 
+    developers working on either app now share the same tooling, component patterns, and
     conventions instead of having to context-switch between two different frameworks, which makes
     it easier for a team to move between the two apps or review each other's work.
   </p>
@@ -78,12 +78,11 @@
 
   <h2 id="dsa">Data Structures and Algorithms</h2>
   <p>
-    The CS 300 course planner is the clearest evidence here. The original version stored courses in
-    a binary search tree; I replaced it with an <code>unordered_map</code> for constant-time course
-    lookup, added a discipline index for faster searching, and implemented a breadth-first search
-    to traverse prerequisite chains. That same habit, matching the structure and algorithm to the
-    operation a program actually performs, shaped the query patterns behind the CS 320 contact
-    database and the Travlr trip lookups too.
+    The original version stored courses in a binary search tree; I replaced it with an 
+    <code>unordered_map</code> for constant-time course lookup, added a discipline index for faster 
+    searching, and implemented a breadth-first search to traverse prerequisite chains. That same 
+    habit, matching the structure and algorithm to the operation a program actually performs, 
+    shaped the query patterns behind the CS 320 contact database and the Travlr trip lookups too.
   </p>
 
   <h2 id="engineering">Software Engineering and Databases</h2>
@@ -98,8 +97,7 @@
 
   <h2 id="security">Security</h2>
   <p>
-    Security shows up as a design constraint, not an afterthought. The CS 320 database layer builds
-    every query with parameterized statements, closing off SQL injection at the source. In CS 465 I
+    The CS 320 database layer builds every query with parameterized statements, reducing the SQL injection attack surface. In CS 465 I
     found and removed a stored XSS surface that existed in both the original Handlebars template
     and the original Angular admin app, each rendering trip descriptions as raw HTML, and carried
     the app's existing JWT authentication forward into the new React admin app so protected
